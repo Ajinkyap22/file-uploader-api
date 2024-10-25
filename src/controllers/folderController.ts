@@ -1,3 +1,4 @@
+import { getFilesByFolderId } from "../database/queries/fileQueries";
 import {
   createFolder,
   getAllFolders,
@@ -34,6 +35,22 @@ export const getFolderByIdController = async (req: Request, res: Response) => {
   try {
     const folder = await getFolderById(id);
     res.json(folder);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json(error);
+  }
+};
+
+export const getFilesByFolderIdController = async (
+  req: Request,
+  res: Response
+) => {
+  const { folderId } = req.params;
+
+  try {
+    const files = await getFilesByFolderId(folderId);
+
+    res.status(200).json(files);
   } catch (error) {
     console.error(error);
     res.status(500).json(error);
