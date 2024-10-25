@@ -3,6 +3,8 @@ import {
   createFolder,
   getAllFolders,
   getFolderById,
+  updateFolder,
+  deleteFolder,
 } from "../database/queries/folderQueries";
 
 import type { Request, Response } from "express";
@@ -51,6 +53,31 @@ export const getFilesByFolderIdController = async (
     const files = await getFilesByFolderId(folderId);
 
     res.status(200).json(files);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json(error);
+  }
+};
+
+export const updateFolderController = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { name } = req.body;
+
+  try {
+    const folder = await updateFolder({ id, name });
+    res.json(folder);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json(error);
+  }
+};
+
+export const deleteFolderController = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    await deleteFolder(id);
+    res.status(204).send();
   } catch (error) {
     console.error(error);
     res.status(500).json(error);
